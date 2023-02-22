@@ -3,6 +3,11 @@
 #Define download directory
 download_dir="$HOME/Downloads/Vbox/"
 
+#Create download directory if it does not exist
+if [ ! -d "$download_dir" ]; then
+mkdir -p "$download_dir"
+fi
+
 # Go to the VirtualBox download page
 wget -qO- https://www.virtualbox.org/wiki/Downloads > page.html
 
@@ -30,9 +35,6 @@ fi
 latest_version=$(echo "$versions" | sort -V | tail -n 1)
 curl -L -o "$download_dir$latest_version" "$url$latest_version"
 
-# Add permissions to VirtualBox RPM file
-chmod +x $latest_version
-
 # Install VirtualBox from RPM file
 sudo dnf -y install $download_dir$latest_version
 
@@ -46,11 +48,6 @@ extension_pack_url="https://download.virtualbox.org/virtualbox/${new_version}/Or
 
 #Define URL of VirtualBox Guest Additions
 guest_additions_url="https://download.virtualbox.org/virtualbox/${new_version}/VBoxGuestAdditions_${new_version}.iso"
-
-#Create download directory if it does not exist
-if [ ! -d "$download_dir" ]; then
-mkdir -p "$download_dir"
-fi
 
 #Download VirtualBox Extension Pack
 echo "Downloading VirtualBox Extension Pack..."
